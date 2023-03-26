@@ -22,6 +22,15 @@ class User:
 # Create
     @classmethod
     def create_user(cls, data):
+
+        # change made here to validate registration before user creation
+        if not cls.validate_registration(data):
+            return False
+        
+        # changes made here to hash password
+        pw_hash = bcrypt.generate_password_hash(data['password'])
+        user = user.copy()
+        user["password"] = pw_hash
         query = '''
         INSERT INTO users
         (name, email, password)
