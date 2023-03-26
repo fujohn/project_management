@@ -63,3 +63,37 @@ class Project:
         else:
             this_proj = cls(results[0])
         # In progress
+
+    # check validation code here
+    @staticmethod
+    def validate_project(self):
+        is_valid = True
+        if len(self.title) < 3:
+            flash("Project title must be at least 3 characters long.")
+            is_valid = False
+        if len(self.description) < 3:
+            flash("Project description must be at least 3 characters long.")
+            is_valid = False
+        return is_valid
+
+    # delete project here
+    @classmethod
+    def delete_project_by_id(cls, project_id):
+        data = {"id": project_id}
+        query = '''
+        DELETE FROM projects
+        WHERE id = %(id)s
+        ;'''
+        result = connectToMySQL(cls.db_name).query_db(query, data)
+        return data
+
+    # edit
+    def update_project(cls, project_dict, session_id):
+        project = cls.get_one_project_by_id(project_dict["id"])
+        query = '''
+        UPDATE projects
+        SET title = %(title)s, description = %(description)s
+        WHERE id = %(id)s
+        ;'''
+        result = connectToMySQL(cls.db_name).query_db(query, project_dict)
+        return project
