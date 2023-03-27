@@ -13,17 +13,14 @@
 <body>
     <header>
         <div class="d-flex justify-content-between my-4">
-            <!--  -->
-            <h1 class="display-1">Group Projects</h1>
-            <!--  -->
-            <h1 class="display-1">New Task</h1>
+            <h1 class="display-1">New Task:</h1>
             <p class="align-self-end"><a href="">Return to Home</a> |
                                     <a href="">Return to Project</a> |
                                     <a href="">Logout</a></p>
         </div>
     </header>
     <main class="my-5">
-        <h3>New Task:</h3>
+        <h3>Create New Task:</h3>
         <form action="/task/new" method="POST">
             <input type="hidden" name="assigner" value="{{request.session.user_id}}">
             <div class="form-group row">
@@ -43,17 +40,19 @@
                 <input class="col" type="date" name="dueDate" value = "{{task.due_date}}">
             </div>
             <div class="form-group row">
-                <label for="assignee">Due Date:</label>
-                <input class="col" type="date" name="assignee" value = "{{task.assignee}}">
+                <label for="assignee">Assignee:</label>
+                <select name="assignee" id="assignee">
+                    {% for project in projects %}
+                        <option value="assignee">{{project.assignee}}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group row">
-                <label for="assignee">Due Date:</label>
-                <textarea class="col" name="description" cols="30" rows="10" value = "{{task.assignee}}">
+                <label for="description">Description:</label>
+                <textarea class="col" name="description" cols="30" rows="10" value = "{{task.description}}">
             </div>
             <button class="btn btn-primary mx-auto" type="submit">Submit</button>
         </form>
-        
-        
 
     </main>
 </body>
