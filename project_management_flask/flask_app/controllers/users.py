@@ -5,7 +5,7 @@ from flask_app.models.user import User
 # variablized route files
 registration_page = 'index.html'
 projects_page = 'projects.html'
-user_dashboard = 'user_dashboard.html'
+user_dashboard = '/dashboard'
 
 
 # registration page
