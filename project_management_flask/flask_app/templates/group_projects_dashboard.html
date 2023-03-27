@@ -21,9 +21,9 @@
     </header>
     <main class="my-5">
         <h3 class="my-5">
-            [NAME OF PROJECT AND TEAM] 
+            {{project.name}}:
             <br>
-            There are a total of [X] tasks to complete for this project. [Y] of them are assigned to you.
+            There are a total of {{tasks.count}} tasks to complete for this project. {{task.user.count}} of them are assigned to you.
         </h3>
         <br>
         <p class="align-self-end"><a href="">Add Task</a></p>
@@ -40,14 +40,14 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Will need to create loop here of tasks by project -->
+                {% for task in tasks %}
                 <tr>
-                    <td>[TASK NAME]</td>
-                    <td>[DUE DATE]</td>
-                    <td>[ASSIGNER]</td>
+                    <td>{{task.name}}</td>
+                    <td>{{task.dueDate}}</td>
+                    <td>{{task.assigner}}</td>
                     <td><a href="">View</a> | <a href="">Complete</a></td>
                 </tr>
-                <!--  -->
+                {% endfor %}
             </tbody>
         </table>
         <!-- Will need an option to show there are no Tasks -->
@@ -66,21 +66,20 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Will need to create loop here of tasks by project -->
+                {% for task in tasks %}
                 <tr>
-                    <td>[TASK NAME]</td>
-                    <td>[DUE DATE]</td>
-                    <td>[ASSIGNER]</td>
+                    <td>{{task.name}}</td>
+                    <td>{{task.dueDate}}</td>
+                    <td>{{task.assigner}}</td>
                     <td><a href="">View</a> | <a href="">Edit</a> | <a href="">Delete</a></td>
                 </tr>
-                <!--  -->
+                {% endfor %}
             </tbody>
         </table>
         <!-- Will need an option to show there are no Tasks -->
         <h3>There are currently no other tasks for this project</h3>
         <br>
 
-        <br>
         <!-- If completed tasks exists logic -->
         <h4>Completed Tasks:</h4>
         <table class="table">
@@ -89,18 +88,16 @@
                     <th>Task</th>
                     <th>Due Date</th>
                     <th>Assigner</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Will need to create loop here of tasks by project -->
+                {% for task in tasks %}
                 <tr>
-                    <td>[TASK NAME]</td>
-                    <td>[DUE DATE]</td>
-                    <td>[ASSIGNER]</td>
-                    <td><a href="">View</a> | <a href="">Edit</a> | <a href="">Delete</a></td>
+                    <td>{{task.name}}</td>
+                    <td>{{task.dueDate}}</td>
+                    <td>{{task.assigner}}</td>
                 </tr>
-                <!--  -->
+                {% endfor %}
             </tbody>
         </table>
         <!-- Will need an option to show there are no Tasks -->
