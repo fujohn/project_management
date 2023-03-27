@@ -12,9 +12,9 @@
 <body>
     <header>
         <div class="d-flex justify-content-between">
-            <h1 class="display-1">Hi, ________________!</h1>
+            <h1 class="display-1">Hi, {{user.name}}!</h1>
             <!-- Pending Invites added in the middle if black belt -->
-            <p class="align-self-end"><a href="___________">Add Project</a> | <a href="___________">Add Task</a> | <a href="______________">Logout</a></p>
+            <p class="align-self-end"><a href="/new_project">Add Project</a> | <a href="___________">Add Task</a> | <a href="/logout">Logout</a></p>
         </div>
     </header>
     <main class="my-5">
@@ -47,7 +47,7 @@
             <h3>You do not have any open tasks!</h3>
         <!-- {% endif %} -->
 
-        <!-- if projects exists -->
+        {% if projects %}
             <h3 class="my-5">View All Projects:</h3>
             <table class="table">
                 <thead class="thead-dark">
@@ -58,18 +58,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- for loop on filtered task list -->
+                    {% for one_project in projects %}
                     <tr>
-                        <td>___project.name__</td>
-                        <td>___project.owner__</td>
-                        <td><a href="_____">View</a><!-- if creator of task --> | <a href="_____">Edit</a> | <a href="_____">Delete</a> <!-- endif --></td>
+                        <td>{{one_project.name}}</td>
+                        <td>{{one_project.assigner.name}}</td>
+                        <td><a href="/project/{{one_project.id}}">View</a>{% if one_project.assigner.id = user.id %} | <a href="/edit_project/{{one_project.id}}">Edit</a> | <a href="/delete_project/{{one_project.id}}">Delete</a>{% endif %}</td>
                     </tr>
-                    <!-- {% endfor %} -->
+                    {% endfor %}
                 </tbody>
             </table>
-        <!-- {% else %} -->
+        {% else %}
             <h3>There are no projects available.</h3>
-        <!-- {% endif %} -->
+        {% endif %}
     </main>
 </body>
 </html>
