@@ -85,7 +85,7 @@ class User:
             flash('Password must be at least 8 characters!', 'register')
             is_valid = False
         if data['confirm_password'] != data['password']:
-            flash("Passwords don't agree", 'register')
+            flash("Passwords don't agree!", 'register')
             is_valid = False
         return is_valid
 
@@ -99,9 +99,9 @@ class User:
         }
         is_email_taken = User.get_user_by_email(user_email)
         if is_email_taken == None:
-            flash("Invalid login credentials", 'login')
+            flash("Email not registered!", 'login')
             return False
         if not bcrypt.check_password_hash(is_email_taken.password, data['password']):
-            flash("Invalid login credentials", 'login')
+            flash("Invalid login credentials!", 'login')
             return False
         return is_email_taken
