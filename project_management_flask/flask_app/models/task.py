@@ -29,7 +29,6 @@ class Task:
 
 # Read 
     @classmethod
-
     def get_all_non_user_tasks(cls):
         query="""
         SELECT * FROM tasks 
