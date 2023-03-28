@@ -1,5 +1,4 @@
-from flask_app.controllers import users, recipes
-# from flask_app.controllers import recipes
+from flask_app.controllers import users, tasks, projects
 from flask_app import app
 
 
