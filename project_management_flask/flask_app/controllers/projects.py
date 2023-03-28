@@ -19,18 +19,28 @@ def projects_home():
     if 'user_id' not in session:
         flash('You must be logged in to view this page!')
         return redirect('/')
+    data = {
+        'id': session['user_id']
+    }
     user = User.get_user_by_id(session['user_id'])
     projects = Project.get_all_projects()
-    tasks = Task.get_all_tasks()
+    all_user_tasks = Task.get_active_user_tasks(data)
 
-    return render_template(dashboard, user=user, projects = projects, tasks=tasks)
+    return render_template(dashboard, user=user, projects = projects, tasks=all_user_tasks)
 
 
-@app.route("/project/<int:project_id>")
+@app.route("/projects/<int:project_id>")
 def project_detail(project_id):
+    data = {
+        'project_id': project_id,
+        'user_id': session['user_id']
+    }
     user = User.get_user_by_id(session['user_id'])
-    project = Project.get_one_project_by_id(project_id)
-    return render_template(project_detail, user=user, project=project)
+    project = Project.get_one_project_by_id(data)
+    own_tasks = Task.get_user_tasks_by_project(data)
+    other_tasks = Task.get_other_tasks_by_project(data)
+    completed_tasks = Task.get_completed_tasks_by_project(data)
+    return render_template(project_detail, user=user, project=project, own_tasks=own_tasks, other_tasks=other_tasks, completed_tasks = completed_tasks)
 
 @app.route("/new_project")
 def new_project():
@@ -51,7 +61,10 @@ def create_new_project():
 
 @app.route("/delete_project/<int:project_id>")
 def delete_project(project_id):
-    project = Project.get_one_project_by_id(project_id)
+    data = {
+        'id': project_id
+    }
+    project = Project.get_one_project_by_id(data)
     if session['user_id'] != project.id:
         return redirect('/dashboard')
     data = {

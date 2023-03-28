@@ -40,16 +40,23 @@
     <main class="my-5 container border border-dark bg-light w-50">
         <div class="m-5">
             <form action="/task/update" method="post">
-                <input type="hidden" name="assigner" value = {{request.session.user_id}}>
+                <div class="form-group row">
+                    <label class="col" for="name">Task Name:</label>
+                    <input type="text" name="name" id="name" value="{{task.name}}">
+                </div>
                 <div class="form-group row">
                     <label class="col" for="dueDate">Due Date:</label>
                     <input class="col" type="date" name="dueDate" value="{{task.dueDate}}">
                 </div>
                 <div class="form-group row">
-                    <label class="col" for="assignee">Assignee:</label>
-                    <select class="col" name="assignee" id="assignee">
-                        {% for user in users%}
-                        <option value="{{user.name}}">{{user.name}}</option>
+                    <label class="col" for="assignee_id">Assignee:</label>
+                    <select class="col" name="assignee_id" id="assignee">
+                        {% for user in users %}
+                            {% if user.id == task.assignee.id %}
+                                <option value="{{user.id}}" selected>{{user.name}}</option>
+                            {% else %}
+                                <option value="{{user.id}}">{{user.name}}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>

@@ -23,24 +23,27 @@ class Task:
         query = '''
         INSERT INTO tasks 
         (name, due_date, description, is_complete, project_id, assigner_id, assignee_id)
-        VALUES (%(name)s, %(due_date)s, %(description)s, %(is_complete)s, %(project_id)s, %(assigner_id)s, %(assignee_id)s)
+        VALUES (%(name)s, %(due_date)s, %(description)s, 0, %(project_id)s, %(assigner_id)s, %(assignee_id)s)
         ;'''
         return connectToMySQL(cls.db_name).query_db(query, data)
 
 # Read 
     @classmethod
-    def get_all_non_user_tasks(cls):
+    def get_other_tasks_by_project(cls, data):
         query="""
         SELECT * FROM tasks 
         JOIN projects on projects.id = tasks.project_id
-        WHERE tasks.assignee_id != projects.user_id;
+        WHERE tasks.assignee_id != %(user_id)s
+        AND projects.id = %(project_id)s
+        AND is_complete = 0
+        ORDER BY due_date;
         """
-        results=connectToMySQL(cls.db_name).query_db(query)
+        results=connectToMySQL(cls.db_name).query_db(query,data)
         tasks=[]
         for row in results:
             task=cls(row)
             task_creator_info={
-                "id":row["assigner_id"],
+                "id":row["assignee_id"],
                 "name":row["name"]
             }
             creator= user.User(task_creator_info)
@@ -49,13 +52,61 @@ class Task:
         return tasks
     
     @classmethod
-    def get_all_user_tasks(cls):
+    def get_user_tasks_by_project(cls, data):
+        query="""
+        SELECT * FROM tasks 
+        JOIN projects on projects.id = tasks.project_id
+        WHERE tasks.assignee_id = %(user_id)s
+        AND projects.id = %(project_id)s
+        AND is_complete = 0
+        ORDER BY due_date;
+        """
+        results=connectToMySQL(cls.db_name).query_db(query,data)
+        tasks=[]
+        for row in results:
+            task=cls(row)
+            task_creator_info={
+                "id":row["assignee_id"],
+                "name":row["name"]
+            }
+            creator= user.User(task_creator_info)
+            task.creator=creator
+            tasks.append(task)
+        return tasks
+    
+    @classmethod
+    def get_completed_tasks_by_project(cls, data):
+        query="""
+        SELECT * FROM tasks 
+        JOIN projects on projects.id = tasks.project_id
+        WHERE projects.id = %(project_id)s
+        AND is_complete = 1
+        ORDER BY due_date;
+        """
+        results=connectToMySQL(cls.db_name).query_db(query,data)
+        tasks=[]
+        for row in results:
+            task=cls(row)
+            task_creator_info={
+                "id":row["assignee_id"],
+                "name":row["name"]
+            }
+            creator= user.User(task_creator_info)
+            task.creator=creator
+            tasks.append(task)
+        return tasks
+    
+    @classmethod
+    def get_active_user_tasks(cls, data):
         query="""
         SELECT * FROM tasks 
         JOIN users on tasks.assignee_id = users.id
-        JOIN projects on projects.id = tasks.project_id;
+        JOIN projects on projects.id = tasks.project_id
+        WHERE users.id = %(id)s
+        AND is_complete = 0
+        ORDER BY due_date;
         """
-        results=connectToMySQL(cls.db_name).query_db(query)
+        results=connectToMySQL(cls.db_name).query_db(query,data)
         tasks=[]
         for row in results:
             task=cls(row)
@@ -72,7 +123,10 @@ class Task:
     def get_task_by_id(cls, id):
         data={"id":id}
         query="""
-        SELECT * FROM tasks WHERE id = %(id)s;
+        SELECT * 
+        FROM tasks 
+        WHERE id = %(id)s
+        ORDER BY due_date;
         """
         result =connectToMySQL(cls.db_name).query_db(query,data)
         if len(result) == 0:
@@ -88,10 +142,19 @@ class Task:
         name = %(name)s,
         due_date = %(due_date)s,
         description = %(description)s,
-        is_complete = %(is_complete)s
+        assignee = %(assignee_id)s
         WHERE id = %(id)s;
         """
-        return connectToMySQL(cls.db_name).query_db(query)
+        return connectToMySQL(cls.db_name).query_db(query,data)
+    
+    @classmethod
+    def complete_task(cls,data):
+        query="""
+        UPDATE tasks SET
+        is_complete = 1
+        WHERE id = %(id)s;
+        """
+        return connectToMySQL(cls.db_name).query_db(query,data)
     
 # Delete
     @classmethod

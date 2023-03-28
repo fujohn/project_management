@@ -5,20 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!-- {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">  -->
     <title>PM App</title>
 </head>
 <body>
     <header>
         <div class="d-flex justify-content-between">
             <h1 class="display-1">Hi, {{user.name}}!</h1>
-            <!-- Pending Invites added in the middle if black belt -->
-            <p class="align-self-end"><a href="/new_project">Add Project</a> | <a href="___________">Add Task</a> | <a href="/logout">Logout</a></p>
+            <p class="align-self-end"><a href="/new_project">Add Project</a> | <a href="/tasks/new">Add Task</a> | <a href="/logout">Logout</a></p>
         </div>
     </header>
     <main class="my-5">
-        <!-- if filtered task list exists -->
+        {% if len(tasks) != 0 %}
             <h3 class="my-5">Here are your open tasks:</h3>
             <table class="table">
                 <thead class="thead-dark">
@@ -31,23 +28,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- for loop on filtered task list -->
+                    {% for one_task in tasks %}
+                    {% if one_task.is_complete != 'complete' %}
                         <tr>
                             <!-- link project here -->
-                            <td>___task.project.name__</td>
-                            <td>___task.name__</td>
-                            <td>___task.due_date__</td>
-                            <td>___task.assigner__</td>
-                            <td><a href="_____">View</a> | <a href="_____">Complete</a><!-- if creator of task --> | <a href="_____">Edit</a> | <a href="_____">Delete</a> <!-- endif --></td>
+                            <td><a href="/projects/{{one_task.project.id}}">{{one_task.project.name}}</a></td>
+                            <td>{{one_task.name}}</td>
+                            <td>{{one_task.due_date}}</td>
+                            <td>{{one_task.assigner}}</td>
+                            <td><a href="/tasks/{{one_task.id}}">View</a> | <a href="/tasks/{{one_task.id}}/complete">Complete</a>{% if one_task.assigner.id = user.id %} | <a href="/task/{{one_task.id}}/edit">Edit</a> | <a href="/task/{{one_task.id}}/delete">Delete</a>{% endif %}</td>
                         </tr>
-                    <!-- {% endfor %} -->
+                    {% endif %}
+                    {% endfor %}
                 </tbody>
             </table>
-        <!-- {% else %} -->
+        {% else %}
             <h3>You do not have any open tasks!</h3>
-        <!-- {% endif %} -->
+        {% endif %}
 
-        {% if projects %}
+        {% if len(projects) != 0 %}
             <h3 class="my-5">View All Projects:</h3>
             <table class="table">
                 <thead class="thead-dark">
@@ -62,7 +61,7 @@
                     <tr>
                         <td>{{one_project.name}}</td>
                         <td>{{one_project.assigner.name}}</td>
-                        <td><a href="/project/{{one_project.id}}">View</a>{% if one_project.assigner.id = user.id %} | <a href="/edit_project/{{one_project.id}}">Edit</a> | <a href="/delete_project/{{one_project.id}}">Delete</a>{% endif %}</td>
+                        <td><a href="/projects/{{one_project.id}}">View</a>{% if one_project.assigner.id = user.id %} | <a href="/edit_project/{{one_project.id}}">Edit</a> | <a href="/delete_project/{{one_project.id}}">Delete</a>{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

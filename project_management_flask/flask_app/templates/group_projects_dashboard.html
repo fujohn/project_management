@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><h3>Group Projects</h3></a>
+                <a class="navbar-brand" href="#"><h3>{{project.title}}</h3></a>
                 <span>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -39,16 +39,17 @@
     </header>
     <main class="my-5">
         <div class="container border border-dark bg-light">
-            <h3 class="my-2">
+            <!-- <h3 class="my-2">
                 {{project.name}}
                 <br>
                 There are a total of {{tasks.count}} tasks to complete for this project. {{user.tasks.count}} of them are assigned to you.
-            </h3>
+            </h3> -->
+            <p>{{project.description}}</p>
             <br>
             <p class="align-self-end"><a href="">Add Task</a></p>
             <br>
             <h4>Your Tasks:</h4>
-            {% if tasks.user.count == 0 %}
+            {% if len(own_tasks) != 0 %}
             <table class="table text-center border border-secondary"style="background-color: #e3f2fd;">
                 <thead class="thead-dark">
                     <tr>
@@ -59,23 +60,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for task in tasks %}
+                    {% for task in own_tasks %}
                     <tr>
                         <td>{{task.name}}</td>
                         <td>{{task.dueDate}}</td>
                         <td>{{task.assigner}}</td>
-                        <td><a href="">View</a> | <a href="">Complete</a></td>
+                        <td><a href="/tasks/{{task.id}}">View</a> | <a href="/tasks/{{task.id}}/complete">Complete</a>{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
-            <!-- Will need an option to show there are no Tasks -->
             <h3>You currently have no tasks for this project</h3>
             {% endif %}
-            <!-- If other tasks exists logic -->
             <h4>Other Tasks:</h4>
-            {% if tasks.count == 0 %}
+            {% if len(other_tasks) != 0 %}
             <!-- WHERE id != user.id -->
             <table class="table text-center border border-secondary" style="background-color: #e3f2fd;">
                 <thead class="thead-dark">
@@ -88,24 +87,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for task in tasks %}
+                    {% for task in other_tasks %}
                     <tr>
                         <td>{{task.name}}</td>
                         <td>{{task.dueDate}}</td>
                         <td>{{task.assigner}}</td>
                         <td>{{task.assignee}}</td>
-                        <td><a href="">View</a> | <a href="">Edit</a> | <a href="">Delete</a></td>
+                        <td><a href="/tasks/{{task.id}}">View</a>{% if task.assigner.id == user.id %} | <a href="/tasks/{{task.id}}/edit">Edit</a> | <a href="/tasks/{{task.id}}/delete">Delete</a>{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
-            <!-- Will need an option to show there are no Tasks -->
             <h3>There are currently no other tasks for this project</h3>
             {% endif %}
-            <!-- If other tasks exists logic -->
             <h4>Completed Tasks:</h4>
-            {% if tasks.count == 0 %}
+            {% if len(completed_tasks) != 0 %}
             <table class="table text-center border border-secondary" style="background-color: #e3f2fd;">
                 <thead class="thead-dark">
                     <tr>
@@ -117,7 +114,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for task in tasks %}
+                    {% for task in completed_tasks %}
                     <tr>
                         <td>{{task.name}}</td>
                         <td>{{task.dueDate}}</td>
