@@ -30,3 +30,15 @@ class Task:
     @classmethod
     def get_all_tasks(cls, data):
         pass
+
+# Validations
+    @staticmethod
+    def validate_task(data):
+        is_valid = True
+        if len(data['name']) < 3:
+            flash('Task name must be at least 3 characters')
+            is_valid = False
+        if len(data['description']) < 10:
+            flash('Description must be at least 10 characters')
+            is_valid = False
+        return is_valid
