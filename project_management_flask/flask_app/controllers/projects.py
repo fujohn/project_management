@@ -81,10 +81,16 @@ def delete_project(project_id):
 
 @app.route("/edit_project/<int:project_id>")
 def edit_project_page(project_id):
-    project = Project.get_one_project_by_id(project_id)
-    if session['user_id'] != project.id:
+    user_data = {'id': session['user_id']}
+    
+    data = {
+        'project_id': project_id,
+        'user_id': session['user_id']
+    }
+    project = Project.get_one_project_by_id(data)
+    if session['user_id'] != project.user.id:
         return redirect('/dashboard')
-    user = User.get_user_by_id(session['user_id'])
+    user = User.get_user_by_id(user_data)
     return render_template(edit_project, user=user, project=project)
 
 @app.route("/update_project/<int:project_id>", methods=['POST'])

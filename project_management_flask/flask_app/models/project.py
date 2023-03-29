@@ -59,22 +59,22 @@ class Project:
         ON projects.user_id = users.id
         WHERE projects.id = %(project_id)s
         ;'''
-        results = connectToMySQL(cls.db_name).query_db(query, data)
-        if not results:
+        result = connectToMySQL(cls.db_name).query_db(query, data)
+        if not result:
             return None
         else:
-            this_proj = cls(results[0])
+            this_proj = cls(result[0])
             this_user_dict = {
-                'id': this_proj['users.id'],
-                'name': this_proj['users.name'],
-                'email': this_proj['email'],
-                'password': this_proj['password'],
-                'created_at': this_proj['users.created_at'],
-                'updated_at': this_proj['users.updated_at']
+                'id': result[0]['users.id'],
+                'name': result[0]['users.name'],
+                'email': result[0]['email'],
+                'password': result[0]['password'],
+                'created_at': result[0]['users.created_at'],
+                'updated_at': result[0]['users.updated_at']
             }
             this_user_obj = user.User(this_user_dict)
             this_proj.assigner = this_user_obj
-            for one_task in results:
+            for one_task in result:
                 task_dict = {
                     'id': one_task['tasks.id'],
                     'name': one_task['tasks.name'],
