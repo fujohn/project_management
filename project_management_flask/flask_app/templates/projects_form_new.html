@@ -24,14 +24,14 @@
         {% endwith %}
         <form action="/create_project" method="post">
             <div class="form-group row">
-                <label class="col" type='text' name="name">Project Title:</label>
-                <input class="col" type="text" name="name" value="{{project.name}}">
+                <label class="col" type='text' name="title">Project Title:</label>
+                <input class="col" type="text" name="title">
             </div>
             <div class="form-group row">
                 <label class="col" type='text' name="description">Description:</label>
-                <textarea class="col" name="description" cols="30" rows="10" >{{project.description}}</textarea>
+                <textarea class="col" name="description" cols="30" rows="10" ></textarea>
             </div>
-            <input type="hidden" name="assigner" value="{{session.user_id}}">
+            <input type="hidden" name="assigner" value={{session.user_id}}>
             <button class="btn btn-primary mx-auto" type="submit">Submit</button>
         </form>
     </main>

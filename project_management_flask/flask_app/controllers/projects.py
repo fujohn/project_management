@@ -10,8 +10,8 @@ from flask_app.models.project import Project
 # variablized route files
 
 dashboard = 'projects.html'
-project_detail = 'group_projects_dashboard.html'
-new_project = 'projects_form_new.html'
+project_detail_page = 'group_projects_dashboard.html'
+new_project_page = 'projects_form_new.html'
 edit_project = 'projects_form_edit.html'
 
 @app.route('/dashboard')
@@ -22,7 +22,7 @@ def projects_home():
     data = {
         'id': session['user_id']
     }
-    user = User.get_user_by_id(session['user_id'])
+    user = User.get_user_by_id(data)
     projects = Project.get_all_projects()
     all_user_tasks = Task.get_active_user_tasks(data)
 
@@ -40,24 +40,28 @@ def project_detail(project_id):
     own_tasks = Task.get_user_tasks_by_project(data)
     other_tasks = Task.get_other_tasks_by_project(data)
     completed_tasks = Task.get_completed_tasks_by_project(data)
-    return render_template(project_detail, user=user, project=project, own_tasks=own_tasks, other_tasks=other_tasks, completed_tasks = completed_tasks)
+    return render_template(project_detail_page, user=user, project=project, own_tasks=own_tasks, other_tasks=other_tasks, completed_tasks = completed_tasks)
 
 @app.route("/new_project")
 def new_project():
-    user = User.get_user_by_id(session['user_id'])
-    return render_template(new_project, user=user)
+    data = {
+        id: session['user_id']
+    }
+    user = User.get_user_by_id(data)
+    return render_template(new_project_page, user=user)
 
 @app.route("/create_project", methods=['POST'])
 def create_new_project():
+    print(session['user_id'])
     if not Project.validate_project(request.form):
         return redirect('/new_project')
     data = {
         'title': request.form['title'],
         'description': request.form['description'],
-        'user_id': session['user_id']
+        'user_id': request.form['assigner']
     }
     new_project =Project.create_project(data)
-    return redirect(f'/show/{new_project.id}')
+    return redirect(f'/projects/{new_project}')
 
 @app.route("/delete_project/<int:project_id>")
 def delete_project(project_id):

@@ -19,15 +19,16 @@ def register():
     valid_user = User.create_user(request.form)
     if not valid_user:
         return redirect('/')
-    session["user_id"] = valid_user.id
+    print(valid_user)
+    session["user_id"] = valid_user
     return redirect(user_dashboard)
 
 @app.route("/login", methods=['POST'])
 def login():
     valid_user = User.validate_login(request.form)
-    if valid_user == False:
+    if not valid_user:
         return redirect('/')
-    session["user_id"] = valid_user.id
+    session["user_id"] = valid_user['id']
     return redirect(user_dashboard)
 
 @app.route("/logout")
