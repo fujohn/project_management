@@ -60,7 +60,7 @@ class Project:
         WHERE projects.id = %(id)s
         ;'''
         results = connectToMySQL(cls.db_name).query_db(query, data)
-        if len(results) == 0:
+        if not results:
             return None
         else:
             this_proj = cls(results[0])
@@ -87,7 +87,7 @@ class Project:
                 this_task_assigner = user.User.get_user_by_id(one_task['tasks.assigner_id'])
                 this_task_assignee = user.User.get_user_by_id(one_task['tasks.assignee_id'])
                 this_task_obj = task.Task(task_dict)
-                this_task_obj.assigee = this_task_assignee
+                this_task_obj.assignee = this_task_assignee
                 this_task_obj.assigner = this_task_assigner
                 this_task_obj.project = this_proj
                 this_proj.tasks.append(this_task_obj)
@@ -95,12 +95,12 @@ class Project:
 
     # check validation code here
     @staticmethod
-    def validate_project(self):
+    def validate_project(data):
         is_valid = True
-        if len(self.title) < 3:
+        if len(data['title']) < 3:
             flash("Project title must be at least 3 characters long.")
             is_valid = False
-        if len(self.description) < 3:
+        if len(data['description']) < 3:
             flash("Project description must be at least 3 characters long.")
             is_valid = False
         return is_valid

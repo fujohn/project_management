@@ -29,14 +29,14 @@ class User:
         
         # changes made here to hash password
         pw_hash = bcrypt.generate_password_hash(data['password'])
-        user = user.copy()
+        user = data.copy()
         user["password"] = pw_hash
         query = '''
         INSERT INTO users
         (name, email, password)
         VALUES (%(name)s, %(email)s, %(password)s)
         ;'''
-        return connectToMySQL(cls.db_name).query_db(query, data)
+        return connectToMySQL(cls.db_name).query_db(query, user)
 
 # Read
     @classmethod
@@ -46,7 +46,7 @@ class User:
         WHERE id = %(id)s
         ;'''
         results = connectToMySQL(cls.db_name).query_db(query, data)
-        if len(results) == 0:
+        if not results:
             return None
         else:
             return cls(results[0])
@@ -101,7 +101,7 @@ class User:
         if is_email_taken == None:
             flash("Email not registered!", 'login')
             return False
-        if not bcrypt.check_password_hash(is_email_taken.password, data['password']):
+        if not bcrypt.check_password_hash(is_email_taken['password'], data['password']):
             flash("Invalid login credentials!", 'login')
             return False
         return is_email_taken

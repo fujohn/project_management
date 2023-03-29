@@ -39,13 +39,18 @@
     </header>
     <main class="my-5 container border border-dark bg-light w-50">
         <div class="m-5">
-            <form action="/task/new" method="post">
-                <input type="hidden" name="assigner" value = {{request.session.user_id}}>
+            <form action="/create_task" method="post">
+                <input type="hidden" name="assigner_id" value = {{request.session.user_id}}>
+                <input type="hidden" name="is_complete" value = 0>
                 <div class="form-group row">
-                    <label class="col" for="name">Project Title:</label>
+                    <label class="col" for="name">Task Name:</label>
+                    <input class="col" type="text" name="name">
+                </div>
+                <div class="form-group row">
+                    <label class="col" for="name">Project Affiliation:</label>
                     <select class="col" name="name" id="name">
                         {% for project in projects %}
-                        <option value="{{project.name}}">{{project.name}}</option>
+                        <option value="{{project.id}}">{{project.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -54,10 +59,10 @@
                     <input class="col" type="date" name="dueDate">
                 </div>
                 <div class="form-group row">
-                    <label class="col" for="assignee">Assignee:</label>
-                    <select class="col" name="assignee" id="assignee">
-                        {% for user in users%}
-                        <option value="{{user.name}}">{{user.name}}</option>
+                    <label class="col" for="assignee_id">Assignee:</label>
+                    <select class="col" name="assignee_id" id="assignee">
+                        {% for user in users %}
+                        <option value="{{user.id}}">{{user.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
