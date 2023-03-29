@@ -10,7 +10,7 @@
 <body>
     <header class="d-flex justify-content-between my-4">
         <h1 class="display-3">Edit Project: {{project.name}}</h1>
-        <p class="align-self-end"><a href="/dashboard">Return to Home</a> | <a href="/project/{{project.id}}">Return to Project</a>{%endif%} | <a href="/logout">Logout</a></p>
+        <p class="align-self-end"><a href="/dashboard">Return to Home</a> | <a href="/projects/{{project.id}}">Return to Project</a> | <a href="/logout">Logout</a></p>
     </header>
     <main>
         {% with messages = get_flashed_messages() %}
@@ -22,10 +22,10 @@
                 </ul>
             {% endif %}
         {% endwith %}
-        <form action="update_project/{{project.id}}" method="post">
+        <form action="/update_project/{{project.id}}" method="post">
             <div class="form-group row">
-                <label class="col" type='text' name="name">Project Title:</label>
-                <input class="col" type="text" name="name" value="{{project.name}}">
+                <label class="col" type='text' name="title">Project Title:</label>
+                <input class="col" type="text" name="title" value="{{project.title}}">
             </div>
             <div class="form-group row">
                 <label class="col" type='text' name="description">Description:</label>

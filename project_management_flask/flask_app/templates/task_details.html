@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><h3>Task Details - {{task.name}}</h3></a>
+                <a class="navbar-brand" href="#"><h3>Task Details</h3></a>
                 <span>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,7 +26,7 @@
                         <a class="nav-link" href="/dashboard">Return to Home |</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/projects/{id}/edit">Return to Project |</a>
+                            <a class="nav-link" href="/projects/{{session.project_id}}">Return to Project |</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/logout">Logout</a>
@@ -39,6 +39,7 @@
     </header>
     <main>
         <div class="my-5 container border border-dark bg-light w-50 pb-5">
+            <h3>{{task.name}}</h3>
             <div class="flex align-items-center my-5">
                 <div class="row">
                     <p class="col">Associated Project:</p>
@@ -46,22 +47,24 @@
                 </div>
                 <div class="row">
                     <p class="col">Due Date:</p>
-                    <p class="col">{{task.dueDate}}</p>
+                    <p class="col">{{task.due_date}}</p>
                 </div>
                 <div class="row">
                     <p class="col">Assigner:</p>
-                    <p class="col">{{task.assigner}}</p>
+                    <p class="col">{{task.assigner.name}}</p>
                 </div>
                 <div class="row">
                     <p class="col">Assignee:</p>
-                    <p class="col">{{task.assignee}}</p>
+                    <p class="col">{{task.assignee.name}}</p>
                 </div>
                 <div class="row">
                     <p class="col">Description:</p>
                     <p class="col">{{task.description}}</p>
                 </div>
             </div>
-            <button class="btn btn-success mx-auto" type="submit">Complete</button>
+            {% if task.is_complete == 0 and task.assignee.id == session.user_id %}
+            <a href="/tasks/{{task.id}}/complete"><button class="btn btn-success mx-auto">Complete</button></a>
+            {% endif %}
         </div>
     </main>
 </body>

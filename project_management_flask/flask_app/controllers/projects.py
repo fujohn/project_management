@@ -19,6 +19,9 @@ def projects_home():
     if 'user_id' not in session:
         flash('You must be logged in to view this page!')
         return redirect('/')
+    if 'project_id' in session:
+        session.pop('project_id')
+    print(session)
     data = {
         'id': session['user_id']
     }
@@ -31,8 +34,8 @@ def projects_home():
 
 @app.route("/projects/<int:project_id>")
 def project_detail(project_id):
+    session['project_id'] = project_id
     user_data = {'id': session['user_id']}
-    
     data = {
         'project_id': project_id,
         'user_id': session['user_id']
@@ -67,8 +70,10 @@ def create_new_project():
 
 @app.route("/delete_project/<int:project_id>")
 def delete_project(project_id):
+    print(session['user_id'])
+    print(project_id)
     data = {
-        'id': project_id
+        'project_id': project_id
     }
     project = Project.get_one_project_by_id(data)
     if session['user_id'] != project.id:
@@ -88,7 +93,7 @@ def edit_project_page(project_id):
         'user_id': session['user_id']
     }
     project = Project.get_one_project_by_id(data)
-    if session['user_id'] != project.user.id:
+    if session['user_id'] != project.assigner.id:
         return redirect('/dashboard')
     user = User.get_user_by_id(user_data)
     return render_template(edit_project, user=user, project=project)
@@ -103,5 +108,5 @@ def update_project(project_id):
         'description': request.form['description']
     }
     Project.update_project(data)
-    return redirect(f'/show/{project_id}')
+    return redirect(f'/projects/{project_id}')
 

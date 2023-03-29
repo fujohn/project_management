@@ -25,9 +25,11 @@
                         <li class="nav-item ">
                         <a class="nav-link" href="/dashboard">Return to Home |</a>
                         </li>
+                        {% if 'project_id' in session %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/projects/{id}/edit">Edit Project |</a>
+                            <a class="nav-link" href="/edit_project/{{session.project_id}}">Edit Project |</a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="/logout">Logout</a>
                         </li>
@@ -49,9 +51,20 @@
                 <div class="form-group row">
                     <label class="col" for="project_id">Project Affiliation:</label>
                     <select class="col" name="project_id" id="name">
-                        {% for project in all_projects %}
-                        <option value="{{project.id}}">{{project.title}}</option>
-                        {% endfor %}
+                        {% if 'project_id' in session %}
+                            {% for project in all_projects %}
+                                {% if session.project_id == project.id %}
+                                    <option value="{{project.id}}" selected>{{project.title}}</option>
+                                {%else%}
+                                    <option value="{{project.id}}" selected>{{project.title}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        {%else%}
+                            <option value="" selected></option>
+                            {% for project in all_projects %}
+                                <option value="{{project.id}}">{{project.title}}</option>
+                            {% endfor %}
+                        {% endif %}
                     </select>
                 </div>
                 <div class="form-group row">
