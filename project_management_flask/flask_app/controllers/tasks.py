@@ -28,7 +28,9 @@ def new_task():
     if "user_id" not in session:
         return redirect("/")
     user = User.get_user_by_id(session["user_id"])
-    return render_template(new_task_page, user=user)
+    all_projects = Project.get_all_projects()
+    # some get all user method here
+    return render_template(new_task_page, user=user, all_projects=all_projects)
 
 # Edit a task GET route
 @app.route("/tasks/<int:task_id>/edit")

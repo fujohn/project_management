@@ -105,3 +105,4 @@ class User:
             flash("Invalid login credentials!", 'login')
             return False
         return is_email_taken
+    
