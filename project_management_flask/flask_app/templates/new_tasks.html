@@ -47,16 +47,16 @@
                     <input class="col" type="text" name="name">
                 </div>
                 <div class="form-group row">
-                    <label class="col" for="name">Project Affiliation:</label>
-                    <select class="col" name="name" id="name">
+                    <label class="col" for="project_id">Project Affiliation:</label>
+                    <select class="col" name="project_id" id="name">
                         {% for project in all_projects %}
                         <option value="{{project.id}}">{{project.title}}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="form-group row">
-                    <label class="col" for="dueDate">Due Date:</label>
-                    <input class="col" type="date" name="dueDate">
+                    <label class="col" for="due_date">Due Date:</label>
+                    <input class="col" type="date" name="due_date">
                 </div>
                 <div class="form-group row">
                     <label class="col" for="assignee_id">Assignee:</label>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="form-group row">
                     <label class="col" for="description">Description:</label>
-                    <textarea class="col" cols="30" rows="10"></textarea>
+                    <textarea class="col" cols="30" rows="10" name="description"></textarea>
                 </div>
                 <button class="btn btn-primary mx-auto" type="submit">Submit</button>
             </form>

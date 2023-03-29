@@ -63,6 +63,7 @@ class Project:
         if not result:
             return None
         else:
+            print(result)
             this_proj = cls(result[0])
             this_user_dict = {
                 'id': result[0]['users.id'],
@@ -77,15 +78,15 @@ class Project:
             for one_task in result:
                 task_dict = {
                     'id': one_task['tasks.id'],
-                    'name': one_task['tasks.name'],
+                    'name': one_task['name'],
                     'due_date': one_task['due_date'],
                     'description': one_task['tasks.description'],
                     'is_complete': one_task['is_complete'],
                     'created_at': one_task['tasks.created_at'],
                     'updated_at': one_task['tasks.updated_at']
                 }
-                this_task_assigner = user.User.get_user_by_id(one_task['tasks.assigner_id'])
-                this_task_assignee = user.User.get_user_by_id(one_task['tasks.assignee_id'])
+                this_task_assigner = user.User.get_user_by_id(one_task['assigner_id'])
+                this_task_assignee = user.User.get_user_by_id(one_task['assignee_id'])
                 this_task_obj = task.Task(task_dict)
                 this_task_obj.assignee = this_task_assignee
                 this_task_obj.assigner = this_task_assigner

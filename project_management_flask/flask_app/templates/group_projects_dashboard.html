@@ -58,8 +58,8 @@
                     {% for task in own_tasks %}
                     <tr>
                         <td>{{task.name}}</td>
-                        <td>{{task.dueDate}}</td>
-                        <td>{{task.assigner}}</td>
+                        <td>{{task.due_date}}</td>
+                        <td>{{task.assigner.name}}</td>
                         <td><a href="/tasks/{{task.id}}">View</a> | <a href="/tasks/{{task.id}}/complete">Complete</a></td>
                     </tr>
                     {% endfor %}
