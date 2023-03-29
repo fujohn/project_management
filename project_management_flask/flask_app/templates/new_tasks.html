@@ -49,8 +49,8 @@
                 <div class="form-group row">
                     <label class="col" for="name">Project Affiliation:</label>
                     <select class="col" name="name" id="name">
-                        {% for project in projects %}
-                        <option value="{{project.id}}">{{project.name}}</option>
+                        {% for project in all_projects %}
+                        <option value="{{project.id}}">{{project.title}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -61,7 +61,7 @@
                 <div class="form-group row">
                     <label class="col" for="assignee_id">Assignee:</label>
                     <select class="col" name="assignee_id" id="assignee">
-                        {% for user in users %}
+                        {% for user in all_users %}
                         <option value="{{user.id}}">{{user.name}}</option>
                         {% endfor %}
                     </select>
