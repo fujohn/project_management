@@ -108,8 +108,7 @@ class Project:
 
     # delete project here
     @classmethod
-    def delete_project_by_id(cls, project_id):
-        data = {"id": project_id}
+    def delete_project_by_id(cls, data):
         query = '''
         DELETE FROM projects
         WHERE id = %(id)s
@@ -118,7 +117,8 @@ class Project:
         return data
 
     # edit
-    def update_project(cls, project_dict, session_id):
+    @classmethod
+    def update_project(cls, project_dict):
         project = cls.get_one_project_by_id(project_dict["id"])
         query = '''
         UPDATE projects

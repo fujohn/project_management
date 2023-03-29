@@ -38,15 +38,22 @@ class Task:
         ORDER BY due_date;
         """
         results=connectToMySQL(cls.db_name).query_db(query,data)
+        # print(results)
         tasks=[]
         for row in results:
             task=cls(row)
             task_creator_info={
+                "id":row["assigner_id"],
+                "name":row["name"]
+            }
+            task_assignee_info={
                 "id":row["assignee_id"],
                 "name":row["name"]
             }
-            creator= user.User(task_creator_info)
-            task.creator=creator
+            creator= user.User.get_user_by_id(task_creator_info)
+            task.assigner=creator
+            assignee= user.User.get_user_by_id(task_assignee_info)
+            task.assignee=assignee
             tasks.append(task)
         return tasks
     
@@ -65,10 +72,17 @@ class Task:
         for row in results:
             task=cls(row)
             task_creator_info={
-                "id":row["assignee_id"]
+                "id":row["assigner_id"],
+                "name":row["name"]
+            }
+            task_assignee_info={
+                "id":row["assignee_id"],
+                "name":row["name"]
             }
             creator= user.User.get_user_by_id(task_creator_info)
             task.assigner=creator
+            assignee= user.User.get_user_by_id(task_assignee_info)
+            task.assignee=assignee
             tasks.append(task)
         return tasks
     
@@ -86,11 +100,17 @@ class Task:
         for row in results:
             task=cls(row)
             task_creator_info={
+                "id":row["assigner_id"],
+                "name":row["name"]
+            }
+            task_assignee_info={
                 "id":row["assignee_id"],
                 "name":row["name"]
             }
-            creator= user.User(task_creator_info)
-            task.creator=creator
+            creator= user.User.get_user_by_id(task_creator_info)
+            task.assigner=creator
+            assignee= user.User.get_user_by_id(task_assignee_info)
+            task.assignee=assignee
             tasks.append(task)
         return tasks
     
@@ -108,18 +128,28 @@ class Task:
         tasks=[]
         for row in results:
             task=cls(row)
+            project_info={
+                "project_id":row["project_id"]
+            }
             task_creator_info={
                 "id":row["assigner_id"],
                 "name":row["name"]
             }
-            creator= user.User(task_creator_info)
-            task.creator=creator
+            task_assignee_info={
+                "id":row["assignee_id"],
+                "name":row["name"]
+            }
+            for_project = project.Project.get_one_project_by_id(project_info)
+            task.project = for_project
+            creator= user.User.get_user_by_id(task_creator_info)
+            task.assigner=creator
+            assignee= user.User.get_user_by_id(task_assignee_info)
+            task.assignee=assignee
             tasks.append(task)
         return tasks
     
     @classmethod
-    def get_task_by_id(cls, id):
-        data={"id":id}
+    def get_task_by_id(cls, data):
         query="""
         SELECT * 
         FROM tasks 
@@ -127,10 +157,28 @@ class Task:
         ORDER BY due_date;
         """
         result =connectToMySQL(cls.db_name).query_db(query,data)
-        if len(result) == 0:
+        if not result:
             return False
         else:
-            return cls(result[0])
+            task=cls(result[0])
+            project_info={
+                "project_id":result[0]["project_id"]
+            }
+            task_creator_info={
+                "id":result[0]["assigner_id"],
+                "name":result[0]["name"]
+            }
+            task_assignee_info={
+                "id":result[0]["assignee_id"],
+                "name":result[0]["name"]
+            }
+            for_project = project.Project.get_one_project_by_id(project_info)
+            task.project = for_project
+            creator= user.User.get_user_by_id(task_creator_info)
+            task.assigner=creator
+            assignee= user.User.get_user_by_id(task_assignee_info)
+            task.assignee=assignee
+            return task
         
 # Update
     @classmethod
@@ -140,7 +188,7 @@ class Task:
         name = %(name)s,
         due_date = %(due_date)s,
         description = %(description)s,
-        assignee = %(assignee_id)s
+        assignee_id = %(assignee_id)s
         WHERE id = %(id)s;
         """
         return connectToMySQL(cls.db_name).query_db(query,data)
@@ -156,8 +204,7 @@ class Task:
     
 # Delete
     @classmethod
-    def delete_task_by_id(cls,task_id):
-        data={"id":task_id}
+    def delete_task_by_id(cls,data):
         query="""
         DELETE FROM tasks WHERE id = %(id)s;
         """
@@ -169,6 +216,9 @@ class Task:
     @staticmethod
     def validate_task(task):
         is_valid = True
+        if len(task['project_id']) < 1:
+            flash("Please select an affiliated project", "create_task")
+            is_valid = False
         if len(task["name"]) < 3:
             flash("Name must be more than 3 characters long", "create_task")
             is_valid = False

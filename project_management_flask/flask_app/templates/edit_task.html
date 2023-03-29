@@ -39,19 +39,21 @@
     </header>
     <main class="my-5 container border border-dark bg-light w-50">
         <div class="m-5">
-            <form action="/task/update" method="post">
+            <form action="/tasks/{{task.id}}/update" method="post">
+                <input type="hidden" name="id" value = {{task.id}}>
+                <input type="hidden" name="project_id" value = {{task.project.id}}>
                 <div class="form-group row">
                     <label class="col" for="name">Task Name:</label>
                     <input type="text" name="name" id="name" value="{{task.name}}">
                 </div>
                 <div class="form-group row">
-                    <label class="col" for="dueDate">Due Date:</label>
-                    <input class="col" type="date" name="dueDate" value="{{task.dueDate}}">
+                    <label class="col" for="due_date">Due Date:</label>
+                    <input class="col" type="date" name="due_date" value="{{task.due_date}}">
                 </div>
                 <div class="form-group row">
                     <label class="col" for="assignee_id">Assignee:</label>
                     <select class="col" name="assignee_id" id="assignee">
-                        {% for user in users %}
+                        {% for user in all_users %}
                             {% if user.id == task.assignee.id %}
                                 <option value="{{user.id}}" selected>{{user.name}}</option>
                             {% else %}

@@ -32,10 +32,10 @@
                     {% if one_task.is_complete != 'complete' %}
                         <tr>
                             <!-- link project here -->
-                            <td><a href="/projects/{{one_task.project.id}}">{{one_task.project.name}}</a></td>
+                            <td><a href="/projects/{{one_task.project.id}}">{{one_task.project.title}}</a></td>
                             <td>{{one_task.name}}</td>
                             <td>{{one_task.due_date}}</td>
-                            <td>{{one_task.assigner}}</td>
+                            <td>{{one_task.assigner.id}}</td>
                             <td><a href="/tasks/{{one_task.id}}">View</a> | <a href="/tasks/{{one_task.id}}/complete">Complete</a>{% if one_task.assigner.id == user.id %} | <a href="/task/{{one_task.id}}/edit">Edit</a> | <a href="/task/{{one_task.id}}/delete">Delete</a>{% endif %}</td>
                         </tr>
                     {% endif %}
