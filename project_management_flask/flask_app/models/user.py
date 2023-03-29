@@ -106,3 +106,12 @@ class User:
             return False
         return is_email_taken
     
+    @classmethod
+    def get_all_users(cls):
+        query = "SELECT * FROM users;"
+        results = connectToMySQL(cls.db_name).query_db(query)
+        users = []
+        for user in results:
+            users.append(cls(user))
+        return users
+    
