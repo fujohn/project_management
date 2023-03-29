@@ -49,8 +49,9 @@ def create_new_task():
         return redirect('/')
     if not Task.validate_task(request.form):
         return redirect("/tasks/new")
-    task = Task.create_task(request.form)
-    return redirect(f"/project/{task.project.id}")
+    new_task = Task.create_task(request.form)
+    task = Task.get_task_by_id(new_task)
+    return redirect(f"/projects/{request.form['project_id']}")
 
 # Update a task POST route
 @app.route("/tasks/<int:task_id>/update", methods=["POST"])

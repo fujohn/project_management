@@ -12,7 +12,6 @@ class Task:
         self.is_complete = data['is_complete']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
-        self.user_id = data["user_id"]
         self.project = None
         self.assigner = None
         self.assignee = None
@@ -66,11 +65,10 @@ class Task:
         for row in results:
             task=cls(row)
             task_creator_info={
-                "id":row["assignee_id"],
-                "name":row["name"]
+                "id":row["assignee_id"]
             }
-            creator= user.User(task_creator_info)
-            task.creator=creator
+            creator= user.User.get_user_by_id(task_creator_info)
+            task.assigner=creator
             tasks.append(task)
         return tasks
     
@@ -174,7 +172,7 @@ class Task:
         if len(task["name"]) < 3:
             flash("Name must be more than 3 characters long", "create_task")
             is_valid = False
-        if len(task["due_date"]) < 0:
+        if len(task["due_date"]) < 1:
             flash("Must select a due date!", "create_task")
             is_valid = False
         if len(task["description"]) < 5:
