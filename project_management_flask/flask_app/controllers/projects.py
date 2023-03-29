@@ -31,11 +31,13 @@ def projects_home():
 
 @app.route("/projects/<int:project_id>")
 def project_detail(project_id):
+    user_data = {'id': session['user_id']}
+    
     data = {
         'project_id': project_id,
         'user_id': session['user_id']
     }
-    user = User.get_user_by_id(session['user_id'])
+    user = User.get_user_by_id(user_data)
     project = Project.get_one_project_by_id(data)
     own_tasks = Task.get_user_tasks_by_project(data)
     other_tasks = Task.get_other_tasks_by_project(data)

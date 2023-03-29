@@ -57,7 +57,7 @@ class Project:
         ON tasks.project_id = projects.id
         LEFT JOIN users 
         ON projects.user_id = users.id
-        WHERE projects.id = %(id)s
+        WHERE projects.id = %(project_id)s
         ;'''
         results = connectToMySQL(cls.db_name).query_db(query, data)
         if not results:
