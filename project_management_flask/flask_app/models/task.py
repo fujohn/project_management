@@ -62,10 +62,13 @@ class Task:
         query="""
         SELECT * FROM tasks 
         JOIN projects on projects.id = tasks.project_id
-        WHERE is_complete = 0
+        WHERE tasks.assignee_id = %(user_id)s
+        AND projects.id = %(project_id)s
+        AND is_complete = 0
         ORDER BY due_date;
         """
         results=connectToMySQL(cls.db_name).query_db(query,data)
+        # print(results)
         tasks=[]
         for row in results:
             task=cls(row)
