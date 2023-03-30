@@ -44,8 +44,7 @@ def edit_task(task_id):
     }
     all_users = User.get_all_users()
     task=Task.get_task_by_id(data)
-    project=Task.get_user_tasks_by_project(data)
-    return render_template(edit_task_page, task=task, all_users=all_users, project=project)
+    return render_template(edit_task_page, task=task, all_users=all_users)
 
 # Create a task POST route
 @app.route("/create_task", methods=["POST"])
@@ -83,9 +82,9 @@ def complete_task(task_id):
         return redirect(user_dashboard)
 
 # Delete a task route
-@app.route("/tasks/<int:id>/delete")
-def delete_task(id):
+@app.route("/tasks/<int:task_id>/delete")
+def delete_task(task_id):
     if "user_id" not in session:
         return redirect("/")
-    Task.delete_task_by_id(id)
-    return redirect("/dashboard")
+    Task.delete_task_by_id(task_id)
+    return redirect(f"/projects/{session['project_id']}")
