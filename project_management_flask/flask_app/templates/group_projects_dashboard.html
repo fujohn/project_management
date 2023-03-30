@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><h3>Project</h3></a>
+                <a class="navbar-brand" href="#"><h3>Project Dashboard</h3></a>
                 <span>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -59,7 +59,7 @@
                     {% for task in own_tasks %}
                     <tr>
                         <td>{{task.name}}</td>
-                        <td>{{task.due_date}}</td>
+                        <td>{{task.due_date.strftime("%B %e, %Y")}}</td>
                         <td>{{task.assigner.name}}</td>
                         <td><a href="/tasks/{{task.id}}">View</a> | <a href="/tasks/{{task.id}}/complete">Complete</a>{% if task.assigner.id == session.user_id %} | <a href="/tasks/{{task.id}}/edit">Edit</a> | <a href="/tasks/{{task.id}}/delete">Delete</a>{% endif %}</td>
                     </tr>
@@ -86,7 +86,7 @@
                     {% for task in other_tasks %}
                     <tr>
                         <td>{{task.name}}</td>
-                        <td>{{task.due_date}}</td>
+                        <td>{{task.due_date.strftime("%B %e, %Y")}}</td>
                         <td>{{task.assigner.name}}</td>
                         <td>{{task.assignee.name}}</td>
                         <td><a href="/tasks/{{task.id}}">View</a>{% if task.assigner.id == session.user_id %} | <a href="/tasks/{{task.id}}/edit">Edit</a> | <a href="/tasks/{{task.id}}/delete">Delete</a>{% endif %}</td>
@@ -113,7 +113,7 @@
                     {% for task in completed_tasks %}
                     <tr>
                         <td>{{task.name}}</td>
-                        <td>{{task.due_date}}</td>
+                        <td>{{task.due_date.strftime("%B %e, %Y")}}</td>
                         <td>{{task.assigner.name}}</td>
                         <td>{{task.assignee.name}}</td>
                         <td><a href="/tasks/{{task.id}}">View</a>{% if task.assigner.id == session.user_id %} | <a href="/tasks/{{task.id}}/edit">Edit</a> | <a href="/tasks/{{task.id}}/delete">Delete</a>{% endif %}</td>
