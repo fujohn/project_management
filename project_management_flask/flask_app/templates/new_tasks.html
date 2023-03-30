@@ -41,6 +41,15 @@
     </header>
     <main class="my-5 container border border-dark bg-light w-50">
         <div class="m-5">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="text-danger">{{message}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
             <form action="/create_task" method="post">
                 <input type="hidden" name="assigner_id" value = {{session.user_id}}>
                 <input type="hidden" name="is_complete" value = 0>

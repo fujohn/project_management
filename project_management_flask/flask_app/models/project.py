@@ -108,13 +108,14 @@ class Project:
 
     # delete project here
     @classmethod
-    def delete_project_by_id(cls, data):
-        query = '''
+    def delete_project_by_id(cls, project_id):
+        data={"id" : project_id}
+        query ="""
         DELETE FROM projects
         WHERE id = %(id)s
-        ;'''
+        ;"""
         result = connectToMySQL(cls.db_name).query_db(query, data)
-        return data
+        return result
 
     # edit
     @classmethod
@@ -126,4 +127,4 @@ class Project:
         WHERE id = %(id)s
         ;'''
         result = connectToMySQL(cls.db_name).query_db(query, project_dict)
-        return project
+        return result

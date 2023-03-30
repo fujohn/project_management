@@ -70,19 +70,11 @@ def create_new_project():
 
 @app.route("/delete_project/<int:project_id>")
 def delete_project(project_id):
-    print(session['user_id'])
-    print(project_id)
-    data = {
-        'project_id': project_id
-    }
-    project = Project.get_one_project_by_id(data)
-    if session['user_id'] != project.id:
-        return redirect('/dashboard')
-    data = {
-        'id': project_id
-    }
-    Project.delete_project_by_id(data)
+    if "user_id" not in session:
+        return redirect("/")
+    Project.delete_project_by_id(project_id)
     return redirect('/dashboard')
+
 
 @app.route("/edit_project/<int:project_id>")
 def edit_project_page(project_id):

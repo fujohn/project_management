@@ -62,9 +62,7 @@ class Task:
         query="""
         SELECT * FROM tasks 
         JOIN projects on projects.id = tasks.project_id
-        WHERE tasks.assignee_id = %(user_id)s
-        AND projects.id = %(project_id)s
-        AND is_complete = 0
+        WHERE is_complete = 0
         ORDER BY due_date;
         """
         results=connectToMySQL(cls.db_name).query_db(query,data)
@@ -204,7 +202,8 @@ class Task:
     
 # Delete
     @classmethod
-    def delete_task_by_id(cls,data):
+    def delete_task_by_id(cls,task_id):
+        data={"id":task_id}
         query="""
         DELETE FROM tasks WHERE id = %(id)s;
         """
@@ -228,7 +227,4 @@ class Task:
         if len(task["description"]) < 5:
             flash("Task description must be at least 5 characters long", "create_task")
             is_valid = False
-        # if len(task["is_complete"]) < 5:
-        #     flash("Task description must be at least 5 characters long", "create_task")
-        #     is_valid = False
         return is_valid
